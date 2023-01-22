@@ -73,19 +73,6 @@ public class MainActivity extends AppCompatActivity {
             while ((line = reader.readLine()) != null) {
                 line = line.replace("\"","");
                 String token[] = line.split(",");
-                //ArrayList<String> token = new ArrayList<>();
-                int left = 0, right = 0;
-                /*for(right = 0; right < line.length(); right++){
-                    char c = line.charAt(right);
-                    if(c == ',' && line.charAt(right+1) != ' '){
-                        token.add(line.substring(left,right));
-                        left = right+1;
-                    }
-                    if(c == ',' && line.charAt(right+1) != ','){
-                        token.add("");
-                        left = right+1;
-                    }
-                }*/
                 int i = 0;
                 int id = Integer.parseInt(token[0]);
                 String title = token[1];
