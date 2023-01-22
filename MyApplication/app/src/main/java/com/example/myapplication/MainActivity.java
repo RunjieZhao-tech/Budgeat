@@ -61,17 +61,18 @@ public class MainActivity extends AppCompatActivity {
 //            }
 //        });
 
-        LinearLayout ll = findViewById(R.id.recipes);
-        ImageView iv = findViewById(R.id.image1);
-        Button btnTag = new Button(this);
-        btnTag.setText("Button 1");
-        Button btntag1 = new Button(this);
-        btntag1.setText("Button 2");
+        LinearLayout layout = findViewById(R.id.scroll);
+        //ImageView iv = findViewById(R.id.image1);
+//        Button btnTag = new Button(this);
+//        btnTag.setText("Button 1");
+//        Button btntag1 = new Button(this);
+//        btntag1.setText("Button 2");
+        //ImageView iv = new ImageView(this);
+
 //        ll.addView(btntag1);
 //        ll.addView(btnTag);
-        Glide.with(this).load("https://spoonacular.com/recipeImages/632925-636x393.jpg").into(iv);
-        //myview.setText("This is life");
-        //Initialize database and open it
+        //Glide.with(this).load("https://spoonacular.com/recipeImages/632925-636x393.jpg").into(iv);
+        //ll.addView(iv);
         SQLiteOpenHelper dbh = DatabaseHelper.getmInstance(this);
         SQLiteDatabase db = dbh.getReadableDatabase();
 
@@ -83,13 +84,41 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
+        //reopen the database
+        db = dbh.getReadableDatabase();
+        //search throught database to display images and information
         if (db.isOpen()) {
             Cursor cursor = db.rawQuery("select * from persons", null);
+            //To avoid repeated picture
+            int last_id = -1;
             while (cursor.moveToNext()) {
-                //String name = cursor.getString(1);
+                //search for ingredients
                 int _id = cursor.getInt(0);
+                Cursor ingre_cursor = db.rawQuery("select * from ingredients where recipe_id = "+_id,null);
                 String title = cursor.getString(1);
+                String url = cursor.getString(5);
+                String meal_type = cursor.getString(6);
                 Log.d("id-->","id " + _id+ " Name " + title);
+                if(last_id != _id){
+                    //Iterate through recipes ingredient database
+                    String ingredients = "";
+                    while(ingre_cursor.moveToNext()){
+                        ingredients += ingre_cursor.getString(2) + "(" + ingre_cursor.getDouble(3) + " " + ingre_cursor.getString(4) + "), ";
+                    }
+                    ingredients = ingredients.substring(0,ingredients.length()-2) + ".";
+                    ImageView iv = new ImageView(this);
+                    TextView tv = new TextView(this);
+                    TextView end = new TextView(this);
+                    tv.setText("Name: " + title + "("+ meal_type + ")" + "\nIngredients: " + ingredients);
+                    tv.setId(_id);
+                    end.setText("\n");
+                    Glide.with(this).load(url).into(iv);
+                    layout.addView(tv);
+                    layout.addView(iv);
+                    layout.addView(end);
+                    last_id = _id;
+                }
+
             }
             cursor.close();
             db.close();
@@ -156,7 +185,15 @@ public class MainActivity extends AppCompatActivity {
                 double price = Double.parseDouble(token[4+i]);
                 String web = token[5+i];
                 String type = token[6+i];
+
+                //search if the recipes exist
+                Cursor cursor = db.rawQuery("select * from persons where _id = " + id,null);
                 String sql = "insert into persons VALUES(" + id + ",'" +title+ "','" + subtitle + "'," + ppl + "," + price + ",'" + web + "','" + type + "')";
+                if(cursor.moveToNext()){
+                    String last_type = cursor.getString(6);
+                    String current_type = type + ", " + last_type;
+                    sql = "update persons set meal_type = '" + current_type + "' where _id = " + id;
+                }
                 db.execSQL(sql);
                 Log.d("line -->",line);
                 Log.d("line -->",""+token.length);

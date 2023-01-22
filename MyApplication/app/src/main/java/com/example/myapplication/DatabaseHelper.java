@@ -20,7 +20,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         //input data
-        String sql_persons = "create table persons(_id integer, title text, sub_title text, ppl INT, price double,image text,meal_type text,CHECK(meal_type='Breakfast' OR meal_type='Dinner' OR meal_type='Lunch' OR meal_type='Snack'))";
+        String sql_persons = "create table persons(_id integer, title text, sub_title text, ppl INT, price double,image text,meal_type text)";
         String sql_ingriedients = "create table ingredients(recipe_id integer, ingre_id integer, name text, quantity double, measure text)";
         db.execSQL(sql_persons);
         db.execSQL(sql_ingriedients);

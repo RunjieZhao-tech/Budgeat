@@ -8,22 +8,34 @@
     android:orientation="vertical"
     tools:context=".MainActivity">
 
+
     <Toolbar
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:title="Recipes"
         android:background="?attr/colorPrimary"
-    />
-    <TextView
-        android:layout_width="100dp"
-        android:layout_height="wrap_content"
-        android:text="food"
-    />
-    <ImageView
-        android:id="@+id/image1"
+        />
+
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:layout_centerInParent="true"/>
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:id="@+id/scroll"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" />
+    </ScrollView>
+    <!--    <TextView-->
+<!--        android:layout_width="100dp"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="food\nfood"-->
+<!--    />-->
+<!--    <ImageView-->
+<!--        android:id="@+id/image1"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="200dp"-->
+<!--        android:layout_centerInParent="true"/>-->
 
 <!--    <com.google.android.material.appbar.AppBarLayout-->
 <!--        android:layout_width="match_parent"-->
