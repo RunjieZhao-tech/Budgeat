@@ -97,6 +97,7 @@ public class MainActivity extends AppCompatActivity {
 
         //reopen the database
         db = dbh.getReadableDatabase();
+
         //search throught database to display images and information
         if (db.isOpen()) {
             Cursor cursor = db.rawQuery("select * from persons", null);
@@ -122,8 +123,7 @@ public class MainActivity extends AppCompatActivity {
                     TextView end = new TextView(this);
                     tv.setText("Name: " + title + "(" + meal_type + ")" + "\nIngredients: " + ingredients);
                     tv.setId(_id);
-
-                    end.setText(id_instruct.get(_id)+"\n");
+                    end.setText("Instruction:\n"+id_instruct.get(_id)+"\n");
                     Glide.with(this).load(url).into(iv);
                     layout.addView(tv);
                     layout.addView(iv);
@@ -297,8 +297,6 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Object o) {
             super.onPostExecute(o);
-            //通知适配器发生改变
-            //取消进度条对话框
         }
     }
 
